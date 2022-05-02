@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WorkSupportService</title>
+    <link rel="stylesheet" th:href="@{/button-size.css}">
+    <link rel="stylesheet" th:href="@{/popup.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0-beta3/css/bootstrap.min.css}">
+    <!-- <style>
+        #chatLog {
+            border: 1px solid;
+            width: 100%;
+            height: 300px;
+            overflow: scroll;
+        }
+    </style> -->
+    <script th:src="@{/webjars/bootstrap/5.0.0-beta3/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script>
+        window.onload = function () {
+            var popup = document.getElementById('js-popup');
+            if (!popup) return;
+            popup.classList.add('is-show');
+
+            var blackBg = document.getElementById('js-black-bg');
+            var closeBtn = document.getElementById('js-close-btn');
+
+            closePopUp(blackBg);
+            closePopUp(closeBtn);
+
+            function closePopUp(elem) {
+                if (!elem) return;
+                elem.addEventListener('click', function () {
+                    popup.classList.remove('is-show');
+                })
+            }
+        }
+    </script>
+</head>
+
+<body class="m-3">
+    <div class="d-flex mb-3 mt-3">
+        <div class="mr-auto p-2">
+            <h1>WorkSupportService</h1>
+
+            <div class="d-flex flex-row flex-wrap mb-3 mt-3">
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/}" th:object="${uidForm}">
+                        <input class="btn btn-warning col-auto" type="submit" value="ログアウト">
+                    </form>
+                </div>
+
+                <!-- <div class="item me-1">
+                        <form>
+                            <input class="btn btn-secondary col-auto w-150px"
+                                onclick="location.href='https://wsapp.cs.kobe-u.ac.jp/gsess/status.php'" value="みんなの勉強状況">
+                        </form>
+                    </div> -->
+
+                <!-- <div class="item me-1">
+                        <form method="get" th:action="@{/workstate}" th:object="${uidForm}">
+                            <input name="uid" th:value="${uid}" type="hidden">
+                            <input class="btn btn-info col-auto w-150px" type="submit" value="みんなの勉強状況">
+                        </form>
+                    </div> -->
+
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/__${uid}__/comment/mode/add}">
+                        <input class="btn btn-info col-auto" type="submit" value="コメント">
+                    </form>
+                </div>
+
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/__${uid}__/workstate}">
+                        <input class="btn btn-info col-auto" type="submit" th:value="'みんなの勉強状況(' + ${number} + ')'">
+                    </form>
+                </div>
+
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/__${uid}__/ranking/__${today}__~__${today}__}">
+                        <input class="btn btn-info col-auto" type="submit" th:value="ランキング">
+                    </form>
+                </div>
+
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/__${uid}__/calendar}">
+                        <input class="btn btn-info col-auto" type="submit" value="カレンダー">
+                    </form>
+                </div>
+
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/__${uid}__/challenge/mode/add}">
+                        <input class="btn btn-info col-auto" type="submit" value="チャレンジ">
+                    </form>
+                </div>
+
+                <div class="item mb-1 me-1">
+                    <form method="get"
+                        th:action="@{/__${uid}__/logs/lookback/__${today}__~__${today}__/__${allwork}__}">
+                        <input class="btn btn-secondary col-auto" type="submit" value="振り返り">
+                    </form>
+                </div>
+
+                <!-- <div class="item me-1">
+                        <form method="get" th:action="@{/work/information}" th:object="${uidForm}">
+                            <input name="uid" th:value="${uid}" type="hidden">
+                            <input class="btn btn-secondary col-auto w-150px" type="submit" value="作業情報">
+                        </form>
+                    </div> -->
+
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/__${uid}__/work/information}">
+                        <input class="btn btn-secondary col-auto" type="submit" value="作業管理">
+                    </form>
+                </div>
+
+                <!-- <div class="item me-1">
+                        <form method="get" th:action="@{/user/information}" th:object="${uidForm}">
+                            <input name="uid" th:value="${uid}" type="hidden">
+                            <input class="btn btn-secondary col-auto w-150px" type="submit" value="ユーザ情報">
+                        </form>
+                    </div> -->
+
+                <div class="item mb-1 me-1">
+                    <form method="get" th:action="@{/__${uid}__/information}">
+                        <input class="btn btn-secondary col-auto" type="submit" value="ユーザ情報">
+                    </form>
+                </div>
+
+                <!-- <div class="item me-1">
+                        <form id="alarmForm">
+                            <input id="alarm" type="time">
+                            <input class="btn btn-secondary col-auto" type="submit" value="アラーム設定">
+                        </form>
+                    </div>
+
+                    <script>
+                        t = 0;
+
+                        function alarm() {
+                            var alarm = document.getElementById("alarm").value;
+                            var date = new Date();
+                            var hours = date.getHours();
+                            var minutes = date.getMinutes();
+                            const now = hours + ":" + minutes;
+
+                            console.log("alarm:" + alarm);
+                            console.log("now:" + now);
+
+                            var audio = new Audio();
+
+                            // サウンドファイルまでの URL アドレスを指定
+                            audio.src = "https://hakuhin.jp/download/js/audio/sample_00.wav";
+
+                            // if(now == alarm) return audio.play();
+                            // audio.play();
+                        }
+
+                        t = setInterval("alarm()", 500);
+                    </script> -->
+
+                <!-- <div class="item me-1">
+                        <form id="alarmForm">
+                            <input id="alarm" type="time">
+                            <input id="set" class="btn btn-secondary col-auto" value="alarm" type="submit">
+                        </form>
+                    </div>
+
+                    <audio id="audio" preload="auto">
+                        <source src="https://hakuhin.jp/download/js/audio/sample_00.m4a" type="audio/mp4">
+                        <source src="https://hakuhin.jp/download/js/audio/sample_00.mp3" type="audio/mpeg">
+                        <source src="https://hakuhin.jp/download/js/audio/sample_00.ogg" type="audio/ogg">
+                        <source src="https://hakuhin.jp/download/js/audio/sample_00.wav" type="audio/wav">
+                    </audio>
+
+                    <script>
+                        t = 0;
+                        const se = document.querySelector('#audio');
+                        // document.querySelector("#test").addEventListener("click", () => {
+                        //     se.play();
+                        // });
+                        const alarmForm = document.querySelector("#alarmForm");
+
+                        document.querySelector(alarmForm).addEventListener("submit", () => {
+                             t = setInterval("alarm()", 500);
+                        });
+
+                        function alarm(){
+                            var date = new Date();
+                            var hours = date.getHours();
+                            var minutes = date.getMinutes();
+                            var now = hours + ":" + minutes;
+
+                            const set = document.querySelector('#alarm').trim;
+
+                            console.log("now:" + now);
+                            console.log("set:" + set)
+                        }
+                    </script> -->
+            </div>
+        </div>
+
+        <!-- <div class="ms-auto">
+            <p id="myid"></p>
+        </div> -->
+
+        <div th:if="${isChallengeExist}" class="ms-auto">
+            <div class="d-flex mb-3 mt-3">
+                <div id="chart_div" style="width: 120px; height: 120px;" class="item me-1"></div>
+
+                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                <script type="text/javascript" th:inline="javascript">
+                    google.charts.load('current', { 'packages': ['gauge'] });
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    var challenge = /*[[${challenge}]]*/"";
+
+                    function drawChart() {
+
+                        var data = google.visualization.arrayToDataTable([
+                            ['Label', 'Value'],
+                            ['Challenge', (challenge.worktime / challenge.second) * 100],
+                        ]);
+
+                        var options = {
+                            width: 400, height: 120,
+                            redFrom: 90, redTo: 100,
+                            yellowFrom: 75, yellowTo: 90,
+                            minorTicks: 5
+                        };
+
+                        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+                        chart.draw(data, options);
+                    }
+                </script>
+
+                <div class="item me-1">
+                    <p
+                        th:text="${challenge.sincedatest} + ' ~ ' + ${challenge.untildatest} + 'で' + ${challenge.second / 3600} + '時間'">
+                    </p>
+                    <p
+                        th:text="'進行度 : ' + ${#numbers.formatDecimal(challenge.worktime / 3600.0, 1, 'COMMA', 1, 'POINT')} + '時間 / ' + ${#numbers.formatDecimal(challenge.second / 3600.0, 1, 'COMMA', 1, 'POINT')} + '時間'">
+                    </p>
+                    <p th:text="${challenge.achievementflag}? '達成済み' : (${challenge.expiredflag}? '期限切れ' : '挑戦中')"
+                        th:class="${challenge.achievementflag}? text-success : (${challenge.expiredflag}? text-danger : text-primary)">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script>
+        t = 0;
+        var elem = document.getElementById("myid");
+
+        function time() {
+            var date = new Date();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+            elem.innerHTML = hours + "時" + minutes + "分" + seconds + "秒";
+        }
+
+        t = setInterval("time()", 500);
+    </script> -->
+
+    <h2 th:if="${commentCreated}" class="text-success">コメントを登録しました</h2>
+
+    <div th:if="${addCommentMode}">
+        <h2>コメントフォーム</h2>
+
+        <div class="item mb-3 mt-3">
+            <form method="get" th:action="@{/__${uid}__/logs/}">
+                <input class="btn btn-warning col-auto" type="submit" value="やめる">
+            </form>
+        </div>
+
+        <h3 th:if="${isCommentFormError}" class="text-danger">入力してください</h3>
+        <h3 th:if="${isWorkDoseNotExist}" class="text-danger">対象の作業を選択してください</h3>
+
+        <form method="post" th:action="@{/__${uid}__/comment/add}" th:object="${commentForm}">
+            <div class="mb-3" id="wid">
+                <select th:field="*{wid}">
+                    <option value="">対象の作業</option>
+                    <option value="0">未指定</option>
+                    <option th:each="work:${works}" th:value="${work.wid}" th:selected="${work.wid == id}"
+                        th:inline="text">
+                        [[${work.wname}]]</option>
+                </select>
+            </div>
+
+            <div class="mb-3 mt-3">
+                <input class="form-control" placeholder="コメント" th:field="*{comment}" required type="text">
+            </div>
+
+            <div class="mb-3">
+                <input type="checkbox" id="achievementflag" th:field="*{achievementflag}" th:value="true"><label
+                    for="achievementflag">成果として記録する</label>
+            </div>
+
+            <div class="mb-3">
+                <input type="checkbox" id="discloseflag" th:field="*{discloseflag}" th:value="true"><label
+                    for="discloseflag">コメントを公開する</label>
+            </div>
+
+            <div class="mb-3">
+                <input class="btn btn-primary" type="submit" value="記録">
+            </div>
+        </form>
+    </div>
+
+    <h2 th:if="${WorkTimeChallengeCreated}" class="text-success">目標作業時間を設定しました</h2>
+    <h2 th:if="${WorkTimeChallengeDeleted}" class="text-warning">目標作業時間を削除しました</h2>
+
+    <div th:if="${addWorkTimeChallengeMode}">
+        <h2>目標作業時間設定フォーム</h2>
+
+        <div class="d-flex mb-3 mt-3">
+            <div class="item me-1">
+                <form method="get" th:action="@{/__${uid}__/logs/}">
+                    <input class="btn btn-warning col-auto" type="submit" value="やめる">
+                </form>
+            </div>
+
+            <div th:if="${isChallengeExist}" class="item me-1">
+                <form method="post" th:action="@{/__${uid}__/challenge/delete}">
+                    <input class="btn btn-danger col-auto" type="submit" value="現在の目標を削除">
+                </form>
+            </div>
+        </div>
+
+        <h3 th:if="${isWorkTimeChallengeFormError}" class="text-danger">入力してください</h3>
+        <div th:if="${isWorkTimeChallengeCoudNotCreateError}" class="text-danger">
+            <h3>目標作業時間を設定できませんでした</h3>
+            <h4>原因として以下が考えられます</h4>
+            <ul>
+                <li>ユーザが作業中である</li>
+                <li>過去の時間を指定している</li>
+            </ul>
+        </div>
+
+        <form method="post" th:action="@{/__${uid}__/challenge/add}" th:object="${workTimeChallengeForm}">
+            <div class="mb-3">
+                <label class="form-label" for="untilst">いつまで</label>
+                <input th:field="*{untilst}" required type="date">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="untilst">目標作業時間</label>
+                <input th:field="*{hour}" required type="number">時間
+            </div>
+
+            <div class="mb-3">
+                <input class="btn btn-primary" type="submit" value="設定">
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${firstLoginToday}" class="popup" id="js-popup">
+        <div th:if="${renewRecord}" class="popup-inner">
+            <div class="close-btn" id="js-close-btn"><i class="fas fa-times"></i></div>
+            連続ログイン記録が<span style="color:red">[[${loginlog.loginstreak}]]</span>日になりました!<br><span
+                style="color:red">最大連続ログイン記録が更新されました!</span><br>最大連続ログイン記録 : <span
+                style="color:red">[[${loginlog.maximumloginstreak}]]</span>日
+        </div>
+
+        <div th:unless="${renewRecord}" class="popup-inner">
+            <div class="close-btn" id="js-close-btn"><i class="fas fa-times"></i></div>
+            連続ログイン記録が<span style="color:red">[[${loginlog.loginstreak}]]</span>日になりました!<br>最大連続ログイン記録 : <span
+                style="color:red">[[${loginlog.maximumloginstreak}]]</span>日
+        </div>
+        <div class="black-background" id="js-black-bg"></div>
+    </div>
+
+    <h2 th:if="${isWorking}" class="text-primary">現在、[[${wname}]]を実行中です</h2>
+    <h2 th:unless="${isStudy}">[[${nickname}]]さん、どの作業をしますか</h2>
+
+    <h2 th:if="${isWorkDidNotEndError}" class="text-danger">直近の作業記録が終了していません</h2>
+    <h2 th:if="${isWorkCanNotEndError}" class="text-danger">正常に記録できませんでした</h2>
+
+    <!-- <h3>累計作業時間 : [[${hour}]]時間 [[${min}]]分 [[${sec}]]秒</h3> -->
+
+    <div class="d-flex flex-row flex-wrap mb-3 mt-3">
+        <div class="item mb-1 me-1" th:each="work:${works}">
+            <div th:if="${work.wname} eq ${wname}">
+                <form method="post" th:action="@{/__${uid}__/logs/endwork}" the:object="${widForm}">
+                    <!-- <input id="nickname" name="nickname" th:value="${nickname}" type="hidden"> -->
+                    <input name="wid" th:value="${work.wid}" type="hidden">
+                    <!-- <input id="wname" name="wname" th:value="${work.wname}" type="hidden"> -->
+                    <input class="btn btn-success col-auto wh-500px" type="submit" th:value="${work.wname}">
+                </form>
+            </div>
+            <div th:unless="${work.wname} eq ${wname}">
+                <form id="widForm" method="post" th:action="@{/__${uid}__/logs/startwork}" the:object="${widForm}">
+                    <input id="nickname" name="nickname" th:value="${nickname}" type="hidden">
+                    <input name="wid" th:value="${work.wid}" type="hidden">
+                    <input id="wname" name="wname" th:value="${work.wname}" type="hidden">
+                    <input class="btn btn-primary col-auto wh-500px" type="submit" th:value="${work.wname}">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- <form id="chatForm">
+        <input id="name" size="8" type="text" value="匿名">
+        <input id="message" size="20" type="text" placeholder="送信するメッセージ">
+        <button type="submit">送信</button>
+    </form> -->
+
+    <!-- <div id="chatLog"></div>
+    <script src="https://fungo.kcg.edu/madoi-20211030/js/madoi.js"></script>
+    <script>
+        window.addEventListener("load", () => {
+            const widForm = document.querySelector("#widForm");
+            const nicknameInput = document.querySelector("#nickname");
+            const wnameInput = document.querySelector("#wname");
+            const logDiv = document.querySelector("#chatLog");
+
+            addMessage = function(nickname, wname) {
+                const span = document.createElement("span");
+                const br = document.createElement("br");
+                span.append(nickname + "さんが" + wname + "を開始しました");
+                logDiv.append(span);
+                logDiv.append(br);
+                logDiv.scrollTop = this.logDiv.scrollHeight;
+            };
+
+            widForm.addEventListener("submit", e => {
+                e.preventDefault();
+                const nickname = nicknameInput.value.trim();
+                const wname = wnameInput.value.trim();
+                // addMessage(nickname, wname);
+                m.othercast("addMessage",
+                    { nickname: nickname, wname: wname});
+            });
+
+            const m = new madoi.Madoi("rooms/WorkSupportService");
+            m.setHandler("addMessage", body => {
+                addMessage(body.nickname, body.wname);
+            });
+        });
+    </script> -->
+</body>
+
+</html>

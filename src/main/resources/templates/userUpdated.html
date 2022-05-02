@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザ登録完了</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0-beta3/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.0.0-beta3/js/bootstrap.min.js}"></script>
+</head>
+<body class="m-3">
+    <h1>ユーザ情報更新完了</h1>
+    <h2>以下の内容でユーザ情報を更新しました</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">ユーザID</th>
+                <td>[[${uid}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">ニックネーム</th>
+                <td>[[${nickname}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">メールアドレス</th>
+                <td>[[${email}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">ToDo管理サービスのユーザID</th>
+                <td>[[${todoid}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">情報を公開するか</th>
+                <td th:if="${discloseflag}">公開する</td>
+                <td th:unless="${discloseflag}">公開しない</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!-- <div class="item mb-3 mt-3">
+        <form method="GET" th:action="@{/user/information}" th:object="${uidForm}">
+            <input name="uid" th:value="${uid}" type="hidden">
+            <input class="btn btn-primary col-auto w-150px" type="submit" value="戻る">
+        </form>
+    </div> -->
+
+    <div class="item mb-3 mt-3">
+        <form method="GET" th:action="@{/__${uid}__/information}" th:object="${uidForm}">
+            <input class="btn btn-primary col-auto" type="submit" value="戻る">
+        </form>
+    </div>
+</body>
+</html>

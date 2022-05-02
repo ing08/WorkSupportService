@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザ登録確認</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0-beta3/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.0.0-beta3/js/bootstrap.min.js}"></script>
+</head>
+<body class="m-3">
+    <h1>ユーザ登録確認</h1>
+
+    <div class="mb-3 mt-3">
+        <form method="get" th:action="@{/}">
+            <input class="btn btn-warning col-auto" type="submit" value="やめる">
+        </form>
+    </div>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">ユーザID</th>
+                <td>[[${uid}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">ニックネーム</th>
+                <td>[[${nickname}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">メールアドレス</th>
+                <td>[[${email}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">ToDo管理サービスのユーザID</th>
+                <td>[[${todoid}]]</td>
+            </tr>
+
+            <tr>
+                <th scope="row">情報を公開するか</th>
+                <td th:if="${discloseflag}">公開する</td>
+                <td th:unless="${discloseflag}">公開しない</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form method="post" th:action="@{/user/register}" class="mb-3">
+        <input type="hidden" name="uid" th:value="${uid}">
+        <input type="hidden" name="nickname" th:value="${nickname}">
+        <input type="hidden" name="email" th:value="${email}">
+        <input type="hidden" name="todoid" th:value="${todoid}">
+        <input type="hidden" name="discloseflag" th:value="${discloseflag}">
+        <input type="submit" class="btn btn-primary col-auto" value="登録する">
+    </form>
+</body>
+</html>

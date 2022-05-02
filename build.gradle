@@ -1,0 +1,50 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'jp.kobe_u.cs27'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
+	implementation 'org.webjars:bootstrap:5.0.0-beta3'
+	runtimeOnly 'mysql:mysql-connector-java'
+	// バリデーション用
+	// compile 'org.springframework.boot:spring-boot-starter-validation' // 外したらエラー出る implementation 'org.springframework.boot:spring-boot-starter-validation'と同じでダブる
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'com.h2database:h2'
+	// https://mvnrepository.com/artifact/org.markdownj/markdownj
+    implementation group: 'org.markdownj', name: 'markdownj', version: '0.3.0-1.0.2b4'
+	// jsoup HTML parser library @ https://jsoup.org/
+	implementation 'org.jsoup:jsoup:1.14.3'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+war {
+    enabled = true
+    archiveName='WorkSupportService.war' // <-ここはプロジェクトに合わせて書き換えてください
+}
