@@ -1,6 +1,7 @@
 # どんなサービスか
 
 - ユーザの日々の作業を記録する<span style="color:red">ライフログ</span>
+- [ゲストログイン](https://wsapp.cs.kobe-u.ac.jp/WorkSupportService/guest/logs)
 
 # サービスの目的
 
@@ -383,3 +384,14 @@
 - "目標作業時間設定フォーム"
 
   - 現在の目標を削除
+
+# サービスの設計仕様
+
+- バックエンド : Spring Boot
+- フロントエンド : HTML/CSS/JavaScript
+
+  - カレンダー : FullCallendar
+  - グラフ : Google Charts
+
+- データベース : MySQL
+- サーバ : Appache tomcat on Linux
